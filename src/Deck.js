@@ -6,7 +6,7 @@ class Deck extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { deck: null };
+    this.state = { deck: null, drawn: [] };
     this.getCard = this.getCard.bind(this);
   }
 
@@ -22,7 +22,16 @@ class Deck extends Component {
     const cardUrl = `${BASE_API_URL}/${deck_id}/draw/`;
     const cardRes = await axios.get(cardUrl);
     const card = cardRes.data.cards[0];
-    console.log(card);
+    this.setState((st) => ({
+      drawn: [
+        ...st.drawn,
+        {
+          id: card.code,
+          image: card.image,
+          suit: `${card.value} OF ${card.suit}`,
+        },
+      ],
+    }));
   }
 
   render() {
